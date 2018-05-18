@@ -2,6 +2,9 @@ import http from 'http';
 import config from './config';
 import express from 'express';
 import apiRouter from './api';
+import sassMiddleware from 'node-sass-middleware';
+import path from 'path';
+
 //import fs from 'fs';
 
 
@@ -26,7 +29,14 @@ import apiRouter from './api';
 
 var server = express();
 server.set('view engine','ejs');
-server.listen(config.port, () => {
+server.use(sassMiddleware({
+   src: path.join(__dirname, 'sass'),
+   dest: path.join(__dirname, 'public')
+}));
+
+import './serverRender';
+
+server.listen(config.port, config.host, () => {
      console.log('listening on port ',config.port);
 });
 

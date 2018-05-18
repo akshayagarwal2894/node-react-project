@@ -1,5 +1,8 @@
 import React from 'react';
 import Header from './Header.js';
+import ContestPreview from './ContestPreview';
+import axios from 'axios';
+//import data from '../testData.json';
 
 class App extends React.Component {
 /*    constructor(props){
@@ -9,30 +12,40 @@ class App extends React.Component {
       }};*/
 
     state={
-       pageHeader: "Naming Contests"
+       pageHeader: "Naming Contests",
+       contests: []
     };
 
     componentDidMount(){
-      console.log('Did Mount');
-//      debugger;
+        axios.get('/api/contests')
+        .then(response => {
+            this.setState({
+                contests: response.data.contests
+            });
+        })
+        .catch(console.error)
     }
  
     componentWillUnmount(){
       console.log('Component Will Unmount');
-//      debugger;
     }
 
     render(){
         return(
            <div className="App">
                <Header message="Naming Contests"/>
+               
                <div>
-                    {this.state.pageHeader}
-               </div>
+                   {this.state.contests.map(contest =>
+                    <ContestPreview {...contest} />
+                )}
+                    <ContestPreview {...this.state.contests[0]} />
+                </div>
            </div>
         );
     }
 }
+
 /*const App = (props) => {
     return(
        <div className="App">
@@ -43,4 +56,5 @@ class App extends React.Component {
        </div>
     );
 };*/
+
 export default App;
